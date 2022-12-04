@@ -1,6 +1,16 @@
 import random # To be able to get a random number
 import sys    # For me to be able to close the game   
 
+board = []
+buildings = []
+building_count = {}
+building_list = ['R', 'I', 'C', 'O', '*']
+MAX_COUNT = 20
+NUM_ROWS = 20
+NUM_COLUMNS = 20
+turn = 1
+option = -1
+
 print('Welcome, Mayor of Ngee Ann City!')
 print('----------------------------')
 
@@ -19,31 +29,6 @@ def first_screen():
         print('Thanks for playing!')
         sys.exit()
         
-while True:
-    option = first_screen()
-    exit_main_screen = False
-
-    
-    
-    
-    
-    
-board = []
-buildings = []
-building_count = {}
-building_list = ['R', 'I', 'C', 'O', '*']
-MAX_COUNT = 20
-NUM_ROWS = 20
-NUM_COLUMNS = 20
-turn = 1
-option = -1
-
-
-
-start_game(buildings, building_count, turn)  
-display_board(board)
-
-    
 def start_game(buildings, building_count, turn):
     turn = 1
     global board
@@ -87,3 +72,16 @@ def display_board(board):
         for column in range(1, NUM_COLUMNS + 1):
             print('+-----', end = '')
         print('+')
+        
+while True:
+    option = first_screen()
+    exit_main_screen = False        
+    start_game(buildings, building_count, turn)  
+    display_board(board)
+    print()
+
+
+
+
+    
+
