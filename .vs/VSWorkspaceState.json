@@ -1,9 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\SDD Assignment",
-    "\\SDD Assignment\\SDD Assignment"
+    "\\DjangoWebProject1",
+    "\\DjangoWebProject1\\DjangoWebProject1",
+    "\\DjangoWebProject1\\DjangoWebProject1\\app",
+    "\\DjangoWebProject1\\DjangoWebProject1\\app\\static",
+    "\\DjangoWebProject1\\DjangoWebProject1\\app\\static\\app",
+    "\\DjangoWebProject1\\DjangoWebProject1\\app\\static\\app\\fonts",
+    "\\DjangoWebProject1\\DjangoWebProject1\\app\\static\\app\\scripts",
+    "\\DjangoWebProject1\\DjangoWebProject1\\app\\templates",
+    "\\DjangoWebProject1\\DjangoWebProject1\\app\\templates\\app"
   ],
-  "SelectedNode": "\\SDD Assignment\\SDD Assignment.sln",
+  "SelectedNode": "\\SDD Assignment 2.py",
   "PreviewInSolutionExplorer": false
 }
