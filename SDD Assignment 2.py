@@ -22,6 +22,7 @@ def first_screen():
     print('1. Start new game')
     print('2. Load saved game')
     print('3. See High Scores')
+    print('4. Rules on how scoring works')
     print('\n0. Exit')
     sogchoice = int(input('Your choice? '))
     if sogchoice == 1:                
@@ -31,10 +32,21 @@ def first_screen():
         return 1
     if sogchoice == 3:
         print('haha u bad we make later')
+    if sogchoice ==4:
+        game_rule()
     if sogchoice == 0:
         print('Thanks for playing!')
         sys.exit()
 
+def game_rule():
+    print("{:17}{}".format("Residential (R):","""If it is next to an industry (I), then it scores 1 point only. Otherwise, it scores 1
+                 point for each adjacent residential (R) or commercial (C), and 2 points for each adjacent park (O)."""))
+    print("{:17}{}".format("Industry (I):","""Scores 1 point per industry in the city. Each industry generates 1 coin per residential
+                 building adjacent to it."""))
+    print("{:17}{}".format("Commercial (C): ","""Scores 1 point per commercial adjacent to it. Each commercial generates 1 coin
+                 per residential adjacent to it."""))
+    print("{:17}{}".format("Park (O): ","Scores 1 point per park adjacent to it."))
+    print("{:17}{}".format("Road (*)","Scores 1 point per connected road (*) in the same row."))
 
 def start_game(buildings, building_count, turn, coin):
     turn = 1
