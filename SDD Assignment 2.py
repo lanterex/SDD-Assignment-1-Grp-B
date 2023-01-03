@@ -12,7 +12,7 @@ NUM_ROWS = 20
 NUM_COLUMNS = 20
 turn = 1
 option = -1
-coins = 16
+coin = 16
 
 print('Welcome, Mayor of Ngee Ann City!')
 print('----------------------------')
@@ -36,7 +36,7 @@ def first_screen():
         sys.exit()
 
 
-def start_game(buildings, building_count, turn):
+def start_game(buildings, building_count, turn, coin):
     turn = 1
     global board
     board = [['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '], 
@@ -66,9 +66,10 @@ def start_game(buildings, building_count, turn):
     #print(building_count)
     return buildings, building_count, turn
     
-def display_board(board,turn):
+def display_board(board,turn,coin):
     #TODO print header for columns
     print('\n' + 'Turn ' + str(turn) + '\n')
+    print("\n" + "Coin(s): " + str(coin) + "\n")
     print('+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+')
     for row in range(NUM_ROWS):  
         #TODO print row numbering
@@ -125,7 +126,7 @@ def place_buildings(board):
     #get building list
     global building_list
     global turn
-
+    global coin
 
     selected_buildings = []
     #obtaining building queue for the turn
@@ -148,9 +149,9 @@ def place_buildings(board):
             allowplace = prox_check(x_coord,y_coord,turn,board,choice)
         if allowplace == True:
             board[y_coord][x_coord] = choice
+            coin -= 1
         else:
-            print('You must build next to an existing building')
-            board[y_coord][x_coord] = '   '
+            print('Invalid location, choose a different quadrant.')
             turn -= 1                         #Resets back to what it was before the illegal placement.
         
 
@@ -161,6 +162,7 @@ def prox_check(row,column,turn,board,choice):
         checkleft = True
         checkright = True
         checkdown = True
+        checkcurrent = True
         allowplace = False
         if row==0:
             checkup = False
@@ -169,17 +171,19 @@ def prox_check(row,column,turn,board,choice):
         if column ==0:
             checkleft = False
         if column ==19:
-            checkright= False        
-        if checkup == True:
+            checkright= False   
+        if board[column][row] == '   ':
+            checkcurrent = False
+        if checkup == True and checkcurrent == False:
             if board[column-1][row] !=  '   ': #checks if there IS something on its direction. (Being UP)
                 allowplace = True
-        if checkleft == True:
+        if checkleft == True and checkcurrent == False:
             if board[column][row-1] != '   ': #check the cell on the left!
                 allowplace = True
-        if checkright == True:
+        if checkright == True and checkcurrent == False:
             if board[column][row+1] != '   ': #checks the cell on the right!
                 allowplace = True
-        if checkdown == True:
+        if checkdown == True and checkcurrent == False:
             if board[column+1][row] !=  '   ': #checks the cell below!
                 allowplace = True
         return allowplace
@@ -187,16 +191,19 @@ def prox_check(row,column,turn,board,choice):
         pass
             
 
-
+# RUNTIME CODE BELOW
 
 while True:
     option = first_screen()
     exit_main_screen = False        
-    start_game(buildings, building_count, turn)  
-    while turn < 401:
-        display_board(board,turn)
+    start_game(buildings, building_count, turn, coin)  
+    while coin != 0:
+        display_board(board,turn,coin)
         place_buildings(board)
         turn+=1
+    if coin == 0:
+        display_board(board,turn,coin)
+        print("You ran out of money to develop the city, and are ousted by your people.\nGame Over...")
     print()
 
 
