@@ -1,5 +1,5 @@
 import random # To be able to get a random number
-import sys    # For me to be able to close the game
+import sys    # To close the game
 from random import random, randint
 
 board = []
@@ -12,6 +12,7 @@ NUM_ROWS = 20
 NUM_COLUMNS = 20
 turn = 1
 option = -1
+coins = 16
 
 print('Welcome, Mayor of Ngee Ann City!')
 print('----------------------------')
@@ -20,7 +21,7 @@ def first_screen():
     global buildingList,turnnumber,map_grid
     print('1. Start new game')
     print('2. Load saved game')
-    print('3. Tutorial')
+    print('3. See High Scores')
     print('\n0. Exit')
     sogchoice = int(input('Your choice? '))
     if sogchoice == 1:                
@@ -29,7 +30,7 @@ def first_screen():
         print('\n Loading... \n')
         return 1
     if sogchoice == 3:
-        return 2
+        print('haha u bad we make later')
     if sogchoice == 0:
         print('Thanks for playing!')
         sys.exit()
@@ -67,7 +68,7 @@ def start_game(buildings, building_count, turn):
     
 def display_board(board,turn):
     #TODO print header for columns
-    print('Turn ' + str(turn) + '\n')
+    print('\n' + 'Turn ' + str(turn) + '\n')
     print('+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+')
     for row in range(NUM_ROWS):  
         #TODO print row numbering
@@ -144,14 +145,49 @@ def place_buildings(board):
 while True:
     option = first_screen()
     exit_main_screen = False        
-    start_game(buildings, building_count, turn)
+    start_game(buildings, building_count, turn)  
     while turn < 401:
         display_board(board,turn)
         place_buildings(board)
         turn+=1
     print()
 
-
+def prox_check(row,column,firstoption,secondoption):
+    global turnnumber
+    if turnnumber > 1:
+        checkup = True
+        checkleft = True
+        checkright = True
+        checkdown = True
+        allowplace = False
+        if row==0:
+            checkup = False
+        if row==20:
+            checkdown = False
+        if column ==0:
+            checkleft = False
+        if column ==20:
+            checkright= False        
+        if checkup == True:
+            if map_grid[row-1][column] !=  '   ': #checks if there IS something on its direction. (Being UP)
+                allowplace = True
+        if checkleft == True:
+            if map_grid[row][column-1] != '   ': #check the cell on the left!
+                allowplace = True
+        if checkright == True:
+            if map_grid[row][column+1] != '   ': #checks the cell on the right!
+                allowplace = True
+        if checkdown == True:
+            if map_grid[row+1][column] !=  '   ': #checks the cell below!
+                allowplace = True
+        if allowplace == True:
+            pass
+        else:
+            print('You must build next to an existing building')
+            map_grid[row][column] = '   '
+            turnnumber -= 1                         #Resets back to what it was before the illegal placement.
+            buildingList[firstoption][1] += 1
+            buildingList[secondoption][1] += 1
 
 
     
