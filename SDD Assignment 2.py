@@ -13,6 +13,7 @@ NUM_COLUMNS = 20
 turn = 1
 option = -1
 coin = 16
+gameoverflag = False # SET TO TRUE TO INITIATE GAME OVER... ADD DIFFERENT MESSAGES FOR FAILURE AT THE RUNTIME.
 
 print('Welcome, Mayor of Ngee Ann City!')
 print('----------------------------')
@@ -162,6 +163,7 @@ def place_buildings(board):
         if allowplace == True:
             board[y_coord][x_coord] = choice
             coin -= 1
+            losscheck(coin,board)
         else:
             print('Invalid location, choose a different quadrant.')
             turn -= 1                         #Resets back to what it was before the illegal placement.
@@ -202,6 +204,13 @@ def prox_check(row,column,turn,board,choice):
     else:
         pass
             
+def losscheck(coin,board):
+    global gameoverflag
+    if coin == 0:
+        gameoverflag = True
+        display_board(board,turn,coin)
+        print("You ran out of money to develop the city, and are ousted by your people.\nGame Over...")
+
 
 # RUNTIME CODE BELOW
 
@@ -209,13 +218,10 @@ while True:
     option = first_screen()
     exit_main_screen = False        
     start_game(buildings, building_count, turn, coin)  
-    while coin != 0:
+    while gameoverflag == False:
         display_board(board,turn,coin)
         place_buildings(board)
         turn+=1
-    if coin == 0:
-        display_board(board,turn,coin)
-        print("You ran out of money to develop the city, and are ousted by your people.\nGame Over...")
     print()
 
 
