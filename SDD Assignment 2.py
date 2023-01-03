@@ -82,17 +82,23 @@ def start_game(buildings, building_count, turn, coin):
 def display_board(board,turn,coin):
     #TODO print header for columns
     print('\n' + 'Turn ' + str(turn) + '\n')
-    print("\n" + "Coin(s): " + str(coin) + "\n")
-    print('+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+')
+    print("Coin(s): " + str(coin) + "\n")
+    print('    01    02    03    04    05    06    07    08    09    10    11    12    13    14    15    16    17    18    19    20   ')
+    print('  +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+')
+    
     for row in range(NUM_ROWS):  
-        #TODO print row numbering
+        print('{}'.format(str(row+1).zfill(2)),end='')#TODO print row numbering
         for column in range(NUM_COLUMNS):
-                print('| {:3s} '.format(board[row][column]), end = '')
+            
+            print('| {:3s} '.format(board[row][column]), end = '')
         print('|')
-
+        
         print('', end = '')
         for column in range(1, NUM_COLUMNS + 1):
-            print('+-----', end = '')
+            if column == 1:
+                print('  +-----', end = '')
+            else:
+                print('+-----', end = '')
         print('+')
 
 def verify(piece,location):                             #checks which type of piece it is, and parses through the verification using the required verification function
