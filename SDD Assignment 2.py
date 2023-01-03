@@ -40,14 +40,16 @@ def first_screen():
         sys.exit()
 
 def game_rule():
-    print("{:17}{}".format("Residential (R):","""If it is next to an industry (I), then it scores 1 point only. Otherwise, it scores 1
+    print('\n=====    Here are the rules to the game.    =====\n')
+    print("{:17}{}\n".format("Residential (R):","""If it is next to an industry (I), then it scores 1 point only. Otherwise, it scores 1
                  point for each adjacent residential (R) or commercial (C), and 2 points for each adjacent park (O)."""))
-    print("{:17}{}".format("Industry (I):","""Scores 1 point per industry in the city. Each industry generates 1 coin per residential
+    print("{:17}{}\n".format("Industry (I):","""Scores 1 point per industry in the city. Each industry generates 1 coin per residential
                  building adjacent to it."""))
-    print("{:17}{}".format("Commercial (C): ","""Scores 1 point per commercial adjacent to it. Each commercial generates 1 coin
+    print("{:17}{}\n".format("Commercial (C): ","""Scores 1 point per commercial adjacent to it. Each commercial generates 1 coin
                  per residential adjacent to it."""))
-    print("{:17}{}".format("Park (O): ","Scores 1 point per park adjacent to it."))
-    print("{:17}{}".format("Road (*)","Scores 1 point per connected road (*) in the same row."))
+    print("{:17}{}\n".format("Park (O): ","Scores 1 point per park adjacent to it."))
+    print("{:17}{}\n".format("Road (*)","Scores 1 point per connected road (*) in the same row."))
+    return first_screen()
 
 def start_game(buildings, building_count, turn, coin):
     turn = 1
@@ -165,7 +167,7 @@ def place_buildings(board):
         if turn == 1:
             allowplace = True
         else:
-            allowplace = prox_check(x_coord,y_coord,turn,board,choice)
+            allowplace = prox_check(x_coord,y_coord,turn,board)
         if allowplace == True:
             board[y_coord][x_coord] = choice
             coin -= 1
@@ -173,10 +175,8 @@ def place_buildings(board):
         else:
             print('Invalid location, choose a different quadrant.')
             turn -= 1                         #Resets back to what it was before the illegal placement.
-        
 
-
-def prox_check(row,column,turn,board,choice):
+def prox_check(row,column,turn,board):
     if turn != 1:
         checkup = True
         checkleft = True
@@ -217,7 +217,19 @@ def losscheck(coin,board):
         display_board(board,turn,coin)
         print("You ran out of money to develop the city, and are ousted by your people.\nGame Over...")
 
+def score_calc():
+    residentialList = []
+    industryPoints = 0
+    commercialList = []
+    parkList = []
+    roadList = []
 
+    # Industry
+    for row in range (NUM_ROWS):
+        for column in range (NUM_COLUMNS):
+            if board[row][column] == 'I':
+                industryPoints += 1
+    print(f"Industry Points: {industryPoints}") #Test print to see if it adds.
 # RUNTIME CODE BELOW
 
 while True:
