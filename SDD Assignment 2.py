@@ -124,6 +124,8 @@ def parkPiece(location,board):
 def place_buildings(board):
     #get building list
     global building_list
+    global turn
+
 
     selected_buildings = []
     #obtaining building queue for the turn
@@ -138,9 +140,54 @@ def place_buildings(board):
     if choice in building_list:
         location = input("Where? (Provide xy coordinates in x,y format) \n")
         location = location.split(",")
-        x_coord = location[0]
-        y_coord = location[1]
-        board[int(y_coord)-1][int(x_coord)-1] = choice
+        x_coord = int(location[0]) - 1
+        y_coord = int(location[1]) - 1
+        if turn == 1:
+            allowplace = True
+        else:
+            allowplace = prox_check(x_coord,y_coord,turn,board,choice)
+        if allowplace == True:
+            board[y_coord][x_coord] = choice
+        else:
+            print('You must build next to an existing building')
+            board[y_coord][x_coord] = '   '
+            turn -= 1                         #Resets back to what it was before the illegal placement.
+        
+
+
+def prox_check(row,column,turn,board,choice):
+    if turn != 1:
+        checkup = True
+        checkleft = True
+        checkright = True
+        checkdown = True
+        allowplace = False
+        if row==0:
+            checkup = False
+        if row==19:
+            checkdown = False
+        if column ==0:
+            checkleft = False
+        if column ==19:
+            checkright= False        
+        if checkup == True:
+            if board[column-1][row] !=  '   ': #checks if there IS something on its direction. (Being UP)
+                allowplace = True
+        if checkleft == True:
+            if board[column][row-1] != '   ': #check the cell on the left!
+                allowplace = True
+        if checkright == True:
+            if board[column][row+1] != '   ': #checks the cell on the right!
+                allowplace = True
+        if checkdown == True:
+            if board[column+1][row] !=  '   ': #checks the cell below!
+                allowplace = True
+        return allowplace
+    else:
+        pass
+            
+
+
 
 while True:
     option = first_screen()
@@ -151,43 +198,6 @@ while True:
         place_buildings(board)
         turn+=1
     print()
-
-def prox_check(row,column,firstoption,secondoption):
-    global turnnumber
-    if turnnumber > 1:
-        checkup = True
-        checkleft = True
-        checkright = True
-        checkdown = True
-        allowplace = False
-        if row==0:
-            checkup = False
-        if row==20:
-            checkdown = False
-        if column ==0:
-            checkleft = False
-        if column ==20:
-            checkright= False        
-        if checkup == True:
-            if map_grid[row-1][column] !=  '   ': #checks if there IS something on its direction. (Being UP)
-                allowplace = True
-        if checkleft == True:
-            if map_grid[row][column-1] != '   ': #check the cell on the left!
-                allowplace = True
-        if checkright == True:
-            if map_grid[row][column+1] != '   ': #checks the cell on the right!
-                allowplace = True
-        if checkdown == True:
-            if map_grid[row+1][column] !=  '   ': #checks the cell below!
-                allowplace = True
-        if allowplace == True:
-            pass
-        else:
-            print('You must build next to an existing building')
-            map_grid[row][column] = '   '
-            turnnumber -= 1                         #Resets back to what it was before the illegal placement.
-            buildingList[firstoption][1] += 1
-            buildingList[secondoption][1] += 1
 
 
     
