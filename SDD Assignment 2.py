@@ -235,6 +235,15 @@ def score_calc():
             if board[row][column] == 'I':
                 industryPoints += 1
     print(f"Industry Points: {industryPoints}") #Test print to see if it adds.
+    
+    #Road (not fully done yet)
+    for row in range (NUM_NUM_ROWS):  
+        for column in range (num_columns):
+            if map_grid[row][column] == '*':
+                numberofRoad += 1
+            else:   
+                continue
+
 # RUNTIME CODE BELOW
 
 while True:
