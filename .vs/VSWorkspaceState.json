@@ -3,7 +3,6 @@
     "",
     "\\DjangoWebProject1",
     "\\DjangoWebProject1\\DjangoWebProject1",
-    "\\DjangoWebProject1\\DjangoWebProject1\\app",
     "\\DjangoWebProject1\\DjangoWebProject1\\app\\static",
     "\\DjangoWebProject1\\DjangoWebProject1\\app\\static\\app",
     "\\DjangoWebProject1\\DjangoWebProject1\\app\\static\\app\\fonts",
@@ -11,6 +10,6 @@
     "\\DjangoWebProject1\\DjangoWebProject1\\app\\templates",
     "\\DjangoWebProject1\\DjangoWebProject1\\app\\templates\\app"
   ],
-  "SelectedNode": "\\SDD Assignment 2.py",
+  "SelectedNode": "\\DjangoWebProject1\\DjangoWebProject1.sln",
   "PreviewInSolutionExplorer": false
 }

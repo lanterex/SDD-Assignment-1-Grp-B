@@ -51,7 +51,12 @@ def game_rule():
     print("{:17}{}\n".format("Road (*)","Scores 1 point per connected road (*) in the same row."))
     return first_screen()
 
-def start_game(buildings, building_count, turn, coin):
+def start_game(buildings, building_count):
+    global coin
+    coin = 16
+    global gameoverflag
+    gameoverflag = False
+    global turn
     turn = 1
     global board
     board = [['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '], 
@@ -231,16 +236,21 @@ def score_calc():
             if board[row][column] == 'I':
                 industryPoints += 1
     print(f"Industry Points: {industryPoints}") #Test print to see if it adds.
-
-
-    # Park
+    
+    #Road (not fully done yet)
+    for row in range (NUM_NUM_ROWS):  
+        for column in range (num_columns):
+            if map_grid[row][column] == '*':
+                numberofRoad += 1
+            else:   
+                continue
 
 # RUNTIME CODE BELOW
 
 while True:
     option = first_screen()
     exit_main_screen = False        
-    start_game(buildings, building_count, turn, coin)  
+    start_game(buildings, building_count)  
     while gameoverflag == False:
         display_board(board,turn,coin)
         place_buildings(board)
