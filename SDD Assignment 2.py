@@ -167,7 +167,19 @@ def place_buildings(board):
         if turn == 1:
             allowplace = True
         else:
-            allowplace = prox_check(x_coord,y_coord,turn,board)
+            checkup, checkleft, checkright, checkdown, checkcurrent, allowplace = prox_check(x_coord,y_coord,turn,board)
+            if checkup == True and checkcurrent == False:
+                if board[y_coord-1][x_coord] !=  '   ': #checks if there IS something on its direction. (Being UP)
+                    allowplace = True
+            if checkleft == True and checkcurrent == False:
+                if board[y_coord][x_coord-1] != '   ': #check the cell on the left!
+                    allowplace = True
+            if checkright == True and checkcurrent == False:
+                if board[y_coord][x_coord+1] != '   ': #checks the cell on the right!
+                    allowplace = True
+            if checkdown == True and checkcurrent == False:
+                if board[y_coord+1][x_coord] !=  '   ': #checks the cell below!
+                    allowplace = True
         if allowplace == True:
             board[y_coord][x_coord] = choice
             coin -= 1
@@ -194,19 +206,7 @@ def prox_check(row,column,turn,board):
             checkright= False   
         if board[column][row] == '   ':
             checkcurrent = False
-        if checkup == True and checkcurrent == False:
-            if board[column-1][row] !=  '   ': #checks if there IS something on its direction. (Being UP)
-                allowplace = True
-        if checkleft == True and checkcurrent == False:
-            if board[column][row-1] != '   ': #check the cell on the left!
-                allowplace = True
-        if checkright == True and checkcurrent == False:
-            if board[column][row+1] != '   ': #checks the cell on the right!
-                allowplace = True
-        if checkdown == True and checkcurrent == False:
-            if board[column+1][row] !=  '   ': #checks the cell below!
-                allowplace = True
-        return allowplace
+        return checkup, checkleft, checkright, checkdown, checkcurrent, allowplace
     else:
         pass
             
@@ -218,6 +218,7 @@ def losscheck(coin,board):
         print("You ran out of money to develop the city, and are ousted by your people.\nGame Over...")
 
 def score_calc():
+    global coin
     residentialList = []
     industryPoints = 0
     commercialList = []
@@ -230,6 +231,10 @@ def score_calc():
             if board[row][column] == 'I':
                 industryPoints += 1
     print(f"Industry Points: {industryPoints}") #Test print to see if it adds.
+
+
+    # Park
+
 # RUNTIME CODE BELOW
 
 while True:
