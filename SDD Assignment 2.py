@@ -162,11 +162,32 @@ def place_buildings(board):
     selected_buildings.append(building1)
     selected_buildings.append(building2)
     print("Building Selection: ",selected_buildings[0] , " , " , selected_buildings[1])
-    choice = input("Your choice: ")
+    while True:
+        try:
+            choice = input("Your choice: ")
+            if choice == building1 or choice == building2:
+                break
+            print("Please enter one of the buildings in the options given.")
+        except ValueError:
+            print("Invalid input! Please enter one of the buildings in the options given.")
+            continue
     choice = choice.upper()
     if choice in building_list:
-        location = input("Where? (Provide xy coordinates in x,y format) \n")
-        location = location.split(",")
+        while True:
+            try:
+                location = input("Where? (Provide xy coordinates in x,y format) \n")
+                location = location.split(",")
+                print(location)
+                for i in location:
+                    i = int(i)
+                    if i >= 1 and i <= 20:
+                        continue
+                    print("\nInvalid input: Please enter valid coordinates\n")
+                    break
+                break
+            except ValueError:
+                print("Invalid input. Enter in the correct format. (x,y)")
+                continue
         x_coord = int(location[0]) - 1
         y_coord = int(location[1]) - 1
         if turn == 1:
@@ -189,6 +210,8 @@ def place_buildings(board):
             board[y_coord][x_coord] = choice
             coin -= 1
             losscheck(coin,board)
+            if choice == "I":
+                coin_calc(choice,x_coord, y_coord)
         else:
             print('Invalid location, choose a different quadrant.')
             turn -= 1                         #Resets back to what it was before the illegal placement.
@@ -231,6 +254,7 @@ def score_calc():
     roadList = []
 
     # Industry
+    tempList = []
     for row in range (NUM_ROWS):
         for column in range (NUM_COLUMNS):
             if board[row][column] == 'I':
@@ -238,13 +262,30 @@ def score_calc():
     print(f"Industry Points: {industryPoints}") #Test print to see if it adds.
     
     #Road (not fully done yet)
-    for row in range (NUM_NUM_ROWS):  
-        for column in range (num_columns):
-            if map_grid[row][column] == '*':
-                numberofRoad += 1
-            else:   
-                continue
+    # for row in range (NUM_NUM_ROWS):  
+    #     for column in range (num_columns):
+    #         if map_grid[row][column] == '*':
+    #             numberofRoad += 1
+    #         else:   
+    #             continue
 
+def coin_calc(choice,row,column):
+    global coin
+    tempList = []
+    if choice == 'I':
+        checkup, checkleft, checkright, checkdown, checkcurrent, allowplace = prox_check(row,column,turn,board)
+        if checkup == True and checkcurrent == True:                   
+            tempList.append(board[row][column-1])
+        if checkdown == True and checkcurrent == True:              
+            tempList.append(board[row][column+1])
+        if checkleft == True and checkcurrent == True:              
+            tempList.append(board[row-1][column])
+        if checkright == True and checkcurrent == True:             
+            tempList.append(board[row+1][column])
+    for building in tempList:
+        if building == "R":
+            coin += 1
+    print(tempList)
 # RUNTIME CODE BELOW
 
 while True:
