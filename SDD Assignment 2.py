@@ -146,7 +146,13 @@ def parkPiece(location,board):
 
     return localscore
 
-    
+def is_integer(n):
+    try:
+        float(n)
+    except ValueError:
+        return False
+    else:
+        return float(n).is_integer()
 
 def place_buildings(board):
     #get building list
@@ -218,23 +224,35 @@ def place_buildings(board):
 
 def prox_check(row,column,turn,board):
     if turn != 1:
-        checkup = True
-        checkleft = True
-        checkright = True
-        checkdown = True
-        checkcurrent = True
-        allowplace = False
-        if row==0:
+#        checkup = True
+#        checkleft = True
+#        checkright = True
+#        checkdown = True
+#        checkcurrent = True
+        
+        if column == 0:
             checkup = False
-        if row==19:
+        else:
+            checkup = True
+        if column == 19:
             checkdown = False
-        if column ==0:
+        else:
+            checkdown = True
+        if row == 0:
             checkleft = False
-        if column ==19:
-            checkright= False   
+        else:
+            checkleft = True
+        if row == 19:
+            checkright= False 
+        else:
+            checkright = True
         if board[column][row] == '   ':
             checkcurrent = False
-        return checkup, checkleft, checkright, checkdown, checkcurrent, allowplace
+        else:
+            checkcurrent = True
+
+        print(checkup,checkleft,checkright,checkdown,checkcurrent)
+        return checkup, checkleft, checkright, checkdown, checkcurrent
     else:
         pass
             
