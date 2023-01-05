@@ -147,13 +147,24 @@ def parkPiece(location,board):
 
     return localscore
 
-def is_integer(n):
-    try:
-        float(n)
-    except ValueError:
+def check_input(choice):
+    # Split the input string on the comma
+    coords = choice.split(',')
+    
+    # Check that there are exactly two parts
+    if len(coords) != 2:
         return False
-    else:
-        return float(n).is_integer()
+    
+    # Check that both parts are integers within the range 1-20 inclusive
+    for i in coords:
+        if not i.isdigit():
+            return False
+        if not 1 <= int(i) <= 20:
+            return False
+    
+    # If we get here, the input is valid
+    return True
+
 
 def place_buildings(board):
     #get building list
@@ -183,17 +194,14 @@ def place_buildings(board):
         while True:
             try:
                 location = input("Where? (Provide xy coordinates in x,y format) \n")
-                location = location.split(",")
-                print(location)
-                for i in location:
-                    i = int(i)
-                    if i >= 1 and i <= 20:
-                        continue
-                    print("\nInvalid input: Please enter valid coordinates\n")
+                inputBool = check_input(location)
+                if inputBool == False:
+                    print("Please enter a set of valid coordinates, (x,y) format.")
+                else:
+                    location = location.split(',')
                     break
-                break
             except ValueError:
-                print("Invalid input. Enter in the correct format. (x,y)")
+                print("Invaild input! Please enter a set of valid coordinates, (x,y) format.")
                 continue
         x_coord = int(location[0]) - 1
         y_coord = int(location[1]) - 1
@@ -221,11 +229,11 @@ def place_buildings(board):
             if choice == "I":
                 coin_calc(choice,x_coord, y_coord)
         else:
-             print('Invalid location, retype your location.')
-             turn -= 1                         #Resets back to what it was before the illegal placement.
+            print('Invalid location, retype your location.')
+            turn -= 1                         #Resets back to what it was before the illegal placement.
     else:
-         print('Invalid building type, please retype your choice.')
-         turn -=1
+        print('Invalid building type, please retype your choice.')
+        turn -=1
 
 def prox_check(row,column,board):
         checkup = True
