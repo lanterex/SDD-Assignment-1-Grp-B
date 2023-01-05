@@ -214,7 +214,6 @@ def place_buildings(board):
          print('Invalid building type, please retype your choice.')
          turn -=1
 
-
 def prox_check(row,column,turn,board):
     if turn != 1:
 #        checkup = True
@@ -266,6 +265,7 @@ def score_calc():
     roadList = []
 
     # Industry
+    tempList = []
     for row in range (NUM_ROWS):
         for column in range (NUM_COLUMNS):
             if board[row][column] == 'I':
@@ -273,13 +273,30 @@ def score_calc():
     print(f"Industry Points: {industryPoints}") #Test print to see if it adds.
     
     #Road (not fully done yet)
-    for row in range (NUM_NUM_ROWS):  
-        for column in range (num_columns):
-            if map_grid[row][column] == '*':
-                numberofRoad += 1
-            else:   
-                continue
+    # for row in range (NUM_NUM_ROWS):  
+    #     for column in range (num_columns):
+    #         if map_grid[row][column] == '*':
+    #             numberofRoad += 1
+    #         else:   
+    #             continue
 
+def coin_calc(choice,row,column):
+    global coin
+    tempList = []
+    if choice == 'I':
+        checkup, checkleft, checkright, checkdown, checkcurrent, allowplace = prox_check(row,column,turn,board)
+        if checkup == True and checkcurrent == True:                   
+            tempList.append(board[row][column-1])
+        if checkdown == True and checkcurrent == True:              
+            tempList.append(board[row][column+1])
+        if checkleft == True and checkcurrent == True:              
+            tempList.append(board[row-1][column])
+        if checkright == True and checkcurrent == True:             
+            tempList.append(board[row+1][column])
+    for building in tempList:
+        if building == "R":
+            coin += 1
+    print(tempList)
 
 def ingameMenu():
     global gameoverflag
