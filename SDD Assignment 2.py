@@ -272,14 +272,28 @@ def score_calc():
                 industryPoints += 1
     print(f"Industry Points: {industryPoints}") #Test print to see if it adds.
     
+    #Park (not fully complete)
+    for row in range(NUM_ROWS):
+        for column in range(NUM_COLUMNS):
+            if (board[row][column] == 'O'):
+                if board[row+1][column] == 'O':
+                    parkPoints +=1
+                elif board[row-1][column] =='O':
+                    parkPoints +=1
+                elif board[row][column+1] =='O':
+                    parkPoints+=1
+                elif board[row][column-1] =='O':
+                    parkPoints+=1
+    print(f"Park Points: {parkPoints}")
     #Road (not fully done yet)
-    # for row in range (NUM_NUM_ROWS):  
-    #     for column in range (num_columns):
-    #         if map_grid[row][column] == '*':
-    #             numberofRoad += 1
-    #         else:   
-    #             continue
-
+    for row in range(NUM_ROWS):
+        for column in range(NUM_COLUMNS):  
+            if(board[row][column] == '*'):
+                if (board[row][column+1] == '*'):
+                    roadPoints += 1
+                elif(board[row][column+1] =='*'):
+                    roadPoints +=1
+    print(f"Road Points: {roadPoints}")
 def coin_calc(choice,row,column):
     global coin
     tempList = []
