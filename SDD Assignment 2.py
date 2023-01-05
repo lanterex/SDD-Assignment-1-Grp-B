@@ -276,20 +276,48 @@ def losscheck(coin,board):
 
 def score_calc():
     global coin
-    residentialList = []
+
     commercialList = []
     parkList = []
     roadList = []
+    residentialPoints = 0
     industryPoints = 0
     commPoints = 0
     parkPoints = 0
     roadPoints = 0
 
-    # Industry
-
+    # Residential
     for row in range (NUM_ROWS):
         for column in range (NUM_COLUMNS):
-            if board[row][column] == 'I':
+            if board[column][row] == 'R':
+                residentialList = []
+                resPointList = []
+                checkup, checkleft, checkright, checkdown, checkcurrent = prox_check(row,column,board)
+                if checkup == True:             
+                    residentialList.append(board[column-1][row])
+                if checkdown == True:              
+                    residentialList.append(board[column+1][row])
+                if checkleft == True:
+                    residentialList.append(board[column][row-1])
+                if checkright == True:             
+                    residentialList.append(board[column][row+1])
+                for building in residentialList:
+                    indCount = residentialList.count('I')
+                    if indCount > 0:
+                        resPointList.append(1)
+                        break 
+                    elif building in ["R", "C"]:
+                        resPointList.append(1)
+                    elif building == 'O':
+                        resPointList.append(2)
+                residentialPoints = sum(resPointList)
+    print(f"Residential Points: {residentialPoints}")
+
+
+    # Industry
+    for row in range (NUM_ROWS):
+        for column in range (NUM_COLUMNS):
+            if board[column][row] == 'I':
                 industryPoints += 1
     print(f"Industry Points: {industryPoints}") #Test print to see if it adds.
 
