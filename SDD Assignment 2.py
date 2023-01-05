@@ -30,14 +30,15 @@ def first_screen():
         return 1
     if sogchoice == 2:
         print('\n Loading... \n')
-        return 1
+        return 2
     if sogchoice == 3:
         print('haha u bad we make later')
+        return 3
     if sogchoice ==4:
-        game_rule()
+        return 4
     if sogchoice == 0:
         print('Thanks for playing!')
-        sys.exit()
+        return 0
 
 def game_rule():
     print('\n=====    Here are the rules to the game.    =====\n')
@@ -298,7 +299,7 @@ def coin_calc(choice,row,column):
     global coin
     tempList = []
     if choice == 'I':
-        checkup, checkleft, checkright, checkdown, checkcurrent, allowplace = prox_check(row,column,turn,board)
+        checkup, checkleft, checkright, checkdown, checkcurrent = prox_check(row,column,turn,board)
         if checkup == True and checkcurrent == True:                   
             tempList.append(board[row][column-1])
         if checkdown == True and checkcurrent == True:              
@@ -339,12 +340,24 @@ def ingameMenu():
 
 while True:
     option = first_screen()
-    exit_main_screen = False        
-    start_game(buildings, building_count)  
-    while gameoverflag == False:
-        display_board(board,turn,coin)
-        ingameMenu()
-        turn+=1
+    exit_main_screen = False
+    if option == 1:
+        start_game(buildings, building_count)
+        while gameoverflag == False:
+            display_board(board,turn,coin)
+            ingameMenu()
+            turn+=1
+    elif option == 2:
+        print('No.')
+    elif option == 3:
+        print('No.')
+    elif option == 4:
+        game_rule()
+    elif option == 0:
+        sys.exit()
+    else:
+        print('Invalid option.')
+    
     print()
 
 
