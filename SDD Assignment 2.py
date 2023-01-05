@@ -146,7 +146,13 @@ def parkPiece(location,board):
 
     return localscore
 
-    
+def is_integer(n):
+    try:
+        float(n)
+    except ValueError:
+        return False
+    else:
+        return float(n).is_integer()
 
 def place_buildings(board):
     #get building list
@@ -164,54 +170,82 @@ def place_buildings(board):
     print("Building Selection: ",selected_buildings[0] , " , " , selected_buildings[1])
     choice = input("Your choice: ")
     choice = choice.upper()
-    if choice in building_list:
+    if choice in selected_buildings:
         location = input("Where? (Provide xy coordinates in x,y format) \n")
         location = location.split(",")
-        x_coord = int(location[0]) - 1
-        y_coord = int(location[1]) - 1
-        if turn == 1:
-            allowplace = True
+        x_coord = location[0]
+        y_coord = location[1]
+        if is_integer(x_coord) == True and is_integer(y_coord) == True:
+            x_coord = int(x_coord) - 1
+            y_coord = int(y_coord) - 1
+            if x_coord <= 19 and x_coord >= 0 and y_coord <=19 and y_coord >=0:
+                print(x_coord,y_coord)
+                if turn == 1:
+                    allowplace = True
+                else:
+                    checkup, checkleft, checkright, checkdown, checkcurrent = prox_check(x_coord,y_coord,turn,board)
+                    allowplace = False
+                    if checkup == True and checkcurrent == False:
+                        if board[y_coord-1][x_coord] !=  '   ': #checks if there IS something on its direction. (Being UP)
+                            allowplace = True
+                    if checkleft == True and checkcurrent == False:
+                        if board[y_coord][x_coord-1] != '   ': #check the cell on the left!
+                            allowplace = True
+                    if checkright == True and checkcurrent == False:
+                        if board[y_coord][x_coord+1] != '   ': #checks the cell on the right!
+                            allowplace = True
+                    if checkdown == True and checkcurrent == False:
+                        if board[y_coord+1][x_coord] !=  '   ': #checks the cell below!
+                            allowplace = True
+                if allowplace == True:
+                   board[y_coord][x_coord] = choice
+                   coin -= 1
+                   losscheck(coin,board)
+                else:
+                     print('Invalid location, choose a different quadrant.')
+                     turn -= 1                         #Resets back to what it was before the illegal placement.
+            else:
+                print('Invalid location, choose a different quadrant.')
+                turn -= 1                         #Resets back to what it was before the illegal placement.
         else:
-            checkup, checkleft, checkright, checkdown, checkcurrent, allowplace = prox_check(x_coord,y_coord,turn,board)
-            if checkup == True and checkcurrent == False:
-                if board[y_coord-1][x_coord] !=  '   ': #checks if there IS something on its direction. (Being UP)
-                    allowplace = True
-            if checkleft == True and checkcurrent == False:
-                if board[y_coord][x_coord-1] != '   ': #check the cell on the left!
-                    allowplace = True
-            if checkright == True and checkcurrent == False:
-                if board[y_coord][x_coord+1] != '   ': #checks the cell on the right!
-                    allowplace = True
-            if checkdown == True and checkcurrent == False:
-                if board[y_coord+1][x_coord] !=  '   ': #checks the cell below!
-                    allowplace = True
-        if allowplace == True:
-            board[y_coord][x_coord] = choice
-            coin -= 1
-            losscheck(coin,board)
-        else:
-            print('Invalid location, choose a different quadrant.')
-            turn -= 1                         #Resets back to what it was before the illegal placement.
+             print('Invalid location, retype your location.')
+             turn -= 1                         #Resets back to what it was before the illegal placement.
+    else:
+         print('Invalid building type, please retype your choice.')
+         turn -=1
+
 
 def prox_check(row,column,turn,board):
     if turn != 1:
-        checkup = True
-        checkleft = True
-        checkright = True
-        checkdown = True
-        checkcurrent = True
-        allowplace = False
-        if row==0:
+#        checkup = True
+#        checkleft = True
+#        checkright = True
+#        checkdown = True
+#        checkcurrent = True
+        
+        if column == 0:
             checkup = False
-        if row==19:
+        else:
+            checkup = True
+        if column == 19:
             checkdown = False
-        if column ==0:
+        else:
+            checkdown = True
+        if row == 0:
             checkleft = False
-        if column ==19:
-            checkright= False   
+        else:
+            checkleft = True
+        if row == 19:
+            checkright= False 
+        else:
+            checkright = True
         if board[column][row] == '   ':
             checkcurrent = False
-        return checkup, checkleft, checkright, checkdown, checkcurrent, allowplace
+        else:
+            checkcurrent = True
+
+        print(checkup,checkleft,checkright,checkdown,checkcurrent)
+        return checkup, checkleft, checkright, checkdown, checkcurrent
     else:
         pass
             
