@@ -256,6 +256,7 @@ def losscheck(coin,board):
         display_board(board,turn,coin)
         print("You ran out of money to develop the city, and are ousted by your people.\nGame Over...")
 
+
 def score_calc():
     global coin
     residentialList = []
@@ -279,6 +280,30 @@ def score_calc():
             else:   
                 continue
 
+
+def ingameMenu():
+    global gameoverflag
+    global turn
+    print('\n1. Place Buildings\n2. See Current Score\n3. Save Game\n\n0. Exit\n')
+    choice = input("Your choice: ")
+    if choice == '1':
+        place_buildings(board)
+    elif choice =='2':
+        #scorecheck
+        print('In Progress...')
+        turn -=1
+    elif choice =='3':
+        #savegame
+        print('In Progress...')
+        turn -=1
+    elif choice =='0':
+        print('Returning...')
+        gameoverflag = True
+        
+    else:
+        print('Please enter a valid choice')
+
+
 # RUNTIME CODE BELOW
 
 while True:
@@ -287,7 +312,7 @@ while True:
     start_game(buildings, building_count)  
     while gameoverflag == False:
         display_board(board,turn,coin)
-        place_buildings(board)
+        ingameMenu()
         turn+=1
     print()
 
