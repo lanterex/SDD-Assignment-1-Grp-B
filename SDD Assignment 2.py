@@ -268,10 +268,12 @@ def losscheck(coin,board):
 def score_calc():
     global coin
     residentialList = []
-    industryPoints = 0
     commercialList = []
     parkList = []
     roadList = []
+    industryPoints = 0
+    parkPoints = 0
+    roadPoints = 0
 
     # Industry
     tempList = []
@@ -330,7 +332,7 @@ def ingameMenu():
         place_buildings(board)
     elif choice =='2':
         #scorecheck
-        print('In Progress...')
+        score_calc()
         turn -=1
     elif choice =='3':
         #savegame
