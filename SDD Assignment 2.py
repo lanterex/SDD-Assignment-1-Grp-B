@@ -213,15 +213,16 @@ def place_buildings(board):
             if checkup == True and checkcurrent == False:
                 if board[y_coord-1][x_coord] !=  '   ': #checks if there IS something on its direction. (Being UP)
                     allowplace = True
+            if checkdown == True and checkcurrent == False:
+                if board[y_coord+1][x_coord] !=  '   ': #checks the cell below!
+                    allowplace = True
             if checkleft == True and checkcurrent == False:
                 if board[y_coord][x_coord-1] != '   ': #check the cell on the left!
                     allowplace = True
             if checkright == True and checkcurrent == False:
                 if board[y_coord][x_coord+1] != '   ': #checks the cell on the right!
                     allowplace = True
-            if checkdown == True and checkcurrent == False:
-                if board[y_coord+1][x_coord] !=  '   ': #checks the cell below!
-                    allowplace = True
+
         if allowplace == True:
             board[y_coord][x_coord] = choice
             coin -= 1
@@ -313,19 +314,21 @@ def score_calc():
                 elif(board[row][column+1] =='*'):
                     roadPoints +=1
     print(f"Road Points: {roadPoints}")
+
+
 def coin_calc(choice,row,column):
     global coin
     tempList = []
     if choice == 'I':
         checkup, checkleft, checkright, checkdown, checkcurrent = prox_check(row,column,board)
-        if checkup == True and checkcurrent == True:                   
-            tempList.append(board[row-1][column])
+        if checkup == True and checkcurrent == True:             
+            tempList.append(board[column-1][row])
         if checkdown == True and checkcurrent == True:              
-            tempList.append(board[row+1][column])
-        if checkleft == True and checkcurrent == True:              
-            tempList.append(board[row][column-1])
+            tempList.append(board[column+1][row])
+        if checkleft == True and checkcurrent == True:
+            tempList.append(board[column][row-1])
         if checkright == True and checkcurrent == True:             
-            tempList.append(board[row][column+1])
+            tempList.append(board[column][row+1])
     for building in tempList:
         if building == "R":
             coin += 1
@@ -335,23 +338,30 @@ def ingameMenu():
     global gameoverflag
     global turn
     print('\n1. Place Buildings\n2. See Current Score\n3. Save Game\n\n0. Exit\n')
-    choice = input("Your choice: ")
-    if choice == '1':
-        place_buildings(board)
-    elif choice =='2':
-        #scorecheck
-        score_calc()
-        turn -=1
-    elif choice =='3':
-        #savegame
-        print('In Progress...')
-        turn -=1
-    elif choice =='0':
-        print('Returning...')
-        gameoverflag = True
-        
-    else:
-        print('Please enter a valid choice')
+    while True:
+        try:
+            choice = input("Your choice: ")
+            if choice == '1':
+                place_buildings(board)
+                break
+            elif choice =='2':
+                #scorecheck
+                score_calc()
+                turn -=1
+                break
+            elif choice =='3':
+                #savegame
+                print('In Progress...')
+                turn -=1
+                break
+            elif choice =='0':
+                print('Returning...')
+                gameoverflag = True
+                break
+            else:
+                print("Please enter a valid choice.")
+        except ValueError:
+                    print('Please enter a valid choice.')
 
 
 # RUNTIME CODE BELOW
