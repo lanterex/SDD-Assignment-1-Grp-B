@@ -227,7 +227,7 @@ def place_buildings(board):
             board[y_coord][x_coord] = choice
             coin -= 1
             losscheck(coin,board)
-            if choice == "I":
+            if choice in ['I', 'C']:
                 coin_calc(choice,x_coord, y_coord)
         else:
             print('Invalid location, retype your location.')
@@ -281,17 +281,36 @@ def score_calc():
     parkList = []
     roadList = []
     industryPoints = 0
+    commPoints = 0
     parkPoints = 0
     roadPoints = 0
 
     # Industry
-    tempList = []
+
     for row in range (NUM_ROWS):
         for column in range (NUM_COLUMNS):
             if board[row][column] == 'I':
                 industryPoints += 1
     print(f"Industry Points: {industryPoints}") #Test print to see if it adds.
-    
+
+    # Commercial
+    tempList = []
+    for row in range (NUM_ROWS):
+        for column in range (NUM_COLUMNS):
+            if board[column][row] == 'C':
+                checkup, checkleft, checkright, checkdown, checkcurrent = prox_check(row,column,board)
+                if checkup == True:             
+                    tempList.append(board[column-1][row])
+                if checkdown == True:              
+                    tempList.append(board[column+1][row])
+                if checkleft == True:
+                    tempList.append(board[column][row-1])
+                if checkright == True:             
+                    tempList.append(board[column][row+1])
+    commPoints = tempList.count("C")
+
+    print(f"Commercial Points: {commPoints}")
+
     #Park (not fully complete)
     for row in range(NUM_ROWS):
         for column in range(NUM_COLUMNS):
@@ -319,7 +338,7 @@ def score_calc():
 def coin_calc(choice,row,column):
     global coin
     tempList = []
-    if choice == 'I':
+    if choice in ['I', 'C']:
         checkup, checkleft, checkright, checkdown, checkcurrent = prox_check(row,column,board)
         if checkup == True and checkcurrent == True:             
             tempList.append(board[column-1][row])
@@ -340,7 +359,7 @@ def ingameMenu():
     print('\n1. Place Buildings\n2. See Current Score\n3. Save Game\n\n0. Exit\n')
     while True:
         try:
-            choice = input("Your choice: ")
+            choice = input("Your choice: \n")
             if choice == '1':
                 place_buildings(board)
                 break
