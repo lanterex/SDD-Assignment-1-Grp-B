@@ -30,14 +30,15 @@ def first_screen():
         return 1
     if sogchoice == 2:
         print('\n Loading... \n')
-        return 1
+        return 2
     if sogchoice == 3:
         print('haha u bad we make later')
+        return 3
     if sogchoice ==4:
-        game_rule()
+        return 4
     if sogchoice == 0:
         print('Thanks for playing!')
-        sys.exit()
+        return 0
 
 def game_rule():
     print('\n=====    Here are the rules to the game.    =====\n')
@@ -220,8 +221,11 @@ def place_buildings(board):
             if choice == "I":
                 coin_calc(choice,x_coord, y_coord)
         else:
-            print('Invalid location, choose a different quadrant.')
-            turn -= 1                         #Resets back to what it was before the illegal placement.
+             print('Invalid location, retype your location.')
+             turn -= 1                         #Resets back to what it was before the illegal placement.
+    else:
+         print('Invalid building type, please retype your choice.')
+         turn -=1
 
 def prox_check(row,column,board):
         checkup = True
@@ -260,6 +264,7 @@ def losscheck(coin,board):
         display_board(board,turn,coin)
         print("You ran out of money to develop the city, and are ousted by your people.\nGame Over...")
 
+
 def score_calc():
     global coin
     residentialList = []
@@ -276,14 +281,28 @@ def score_calc():
                 industryPoints += 1
     print(f"Industry Points: {industryPoints}") #Test print to see if it adds.
     
+    #Park (not fully complete)
+    for row in range(NUM_ROWS):
+        for column in range(NUM_COLUMNS):
+            if (board[row][column] == 'O'):
+                if board[row+1][column] == 'O':
+                    parkPoints +=1
+                elif board[row-1][column] =='O':
+                    parkPoints +=1
+                elif board[row][column+1] =='O':
+                    parkPoints+=1
+                elif board[row][column-1] =='O':
+                    parkPoints+=1
+    print(f"Park Points: {parkPoints}")
     #Road (not fully done yet)
-    # for row in range (NUM_NUM_ROWS):  
-    #     for column in range (num_columns):
-    #         if map_grid[row][column] == '*':
-    #             numberofRoad += 1
-    #         else:   
-    #             continue
-
+    for row in range(NUM_ROWS):
+        for column in range(NUM_COLUMNS):  
+            if(board[row][column] == '*'):
+                if (board[row][column+1] == '*'):
+                    roadPoints += 1
+                elif(board[row][column+1] =='*'):
+                    roadPoints +=1
+    print(f"Road Points: {roadPoints}")
 def coin_calc(choice,row,column):
     global coin
     tempList = []
@@ -301,16 +320,52 @@ def coin_calc(choice,row,column):
         if building == "R":
             coin += 1
     print(tempList)
+
+def ingameMenu():
+    global gameoverflag
+    global turn
+    print('\n1. Place Buildings\n2. See Current Score\n3. Save Game\n\n0. Exit\n')
+    choice = input("Your choice: ")
+    if choice == '1':
+        place_buildings(board)
+    elif choice =='2':
+        #scorecheck
+        print('In Progress...')
+        turn -=1
+    elif choice =='3':
+        #savegame
+        print('In Progress...')
+        turn -=1
+    elif choice =='0':
+        print('Returning...')
+        gameoverflag = True
+        
+    else:
+        print('Please enter a valid choice')
+
+
 # RUNTIME CODE BELOW
 
 while True:
     option = first_screen()
-    exit_main_screen = False        
-    start_game(buildings, building_count)  
-    while gameoverflag == False:
-        display_board(board,turn,coin)
-        place_buildings(board)
-        turn+=1
+    exit_main_screen = False
+    if option == 1:
+        start_game(buildings, building_count)
+        while gameoverflag == False:
+            display_board(board,turn,coin)
+            ingameMenu()
+            turn+=1
+    elif option == 2:
+        print('No.')
+    elif option == 3:
+        print('No.')
+    elif option == 4:
+        game_rule()
+    elif option == 0:
+        sys.exit()
+    else:
+        print('Invalid option.')
+    
     print()
 
 
