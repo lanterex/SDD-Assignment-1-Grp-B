@@ -171,13 +171,13 @@ def place_buildings(board):
     while True:
         try:
             choice = input("Your choice: ")
+            choice = choice.upper()
             if choice == building1 or choice == building2:
                 break
             print("Please enter one of the buildings in the options given.")
         except ValueError:
             print("Invalid input! Please enter one of the buildings in the options given.")
             continue
-    choice = choice.upper()
     if choice in building_list:
         while True:
             try:
@@ -199,7 +199,8 @@ def place_buildings(board):
         if turn == 1:
             allowplace = True
         else:
-            checkup, checkleft, checkright, checkdown, checkcurrent, allowplace = prox_check(x_coord,y_coord,turn,board)
+            checkup, checkleft, checkright, checkdown, checkcurrent = prox_check(x_coord,y_coord,board)
+            allowplace = False
             if checkup == True and checkcurrent == False:
                 if board[y_coord-1][x_coord] !=  '   ': #checks if there IS something on its direction. (Being UP)
                     allowplace = True
@@ -222,13 +223,12 @@ def place_buildings(board):
             print('Invalid location, choose a different quadrant.')
             turn -= 1                         #Resets back to what it was before the illegal placement.
 
-def prox_check(row,column,turn,board):
-    if turn != 1:
-#        checkup = True
-#        checkleft = True
-#        checkright = True
-#        checkdown = True
-#        checkcurrent = True
+def prox_check(row,column,board):
+        checkup = True
+        checkleft = True
+        checkright = True
+        checkdown = True
+        checkcurrent = True
         
         if column == 0:
             checkup = False
@@ -252,10 +252,7 @@ def prox_check(row,column,turn,board):
             checkcurrent = True
 
         print(checkup,checkleft,checkright,checkdown,checkcurrent)
-        return checkup, checkleft, checkright, checkdown, checkcurrent
-    else:
-        pass
-            
+        return checkup, checkleft, checkright, checkdown, checkcurrent       
 def losscheck(coin,board):
     global gameoverflag
     if coin == 0:
@@ -291,15 +288,15 @@ def coin_calc(choice,row,column):
     global coin
     tempList = []
     if choice == 'I':
-        checkup, checkleft, checkright, checkdown, checkcurrent, allowplace = prox_check(row,column,turn,board)
+        checkup, checkleft, checkright, checkdown, checkcurrent = prox_check(row,column,board)
         if checkup == True and checkcurrent == True:                   
-            tempList.append(board[row][column-1])
-        if checkdown == True and checkcurrent == True:              
-            tempList.append(board[row][column+1])
-        if checkleft == True and checkcurrent == True:              
             tempList.append(board[row-1][column])
-        if checkright == True and checkcurrent == True:             
+        if checkdown == True and checkcurrent == True:              
             tempList.append(board[row+1][column])
+        if checkleft == True and checkcurrent == True:              
+            tempList.append(board[row][column-1])
+        if checkright == True and checkcurrent == True:             
+            tempList.append(board[row][column+1])
     for building in tempList:
         if building == "R":
             coin += 1
