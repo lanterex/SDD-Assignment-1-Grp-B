@@ -287,6 +287,7 @@ def losscheck(coin,board):
         display_board(board,turn,coin)
         print("You ran out of money to develop the city, and are ousted by your people.\nGame Over...")
     if gameoverflag == True:
+        totalPoints = score_calc()
         savehighscore(totalPoints)
 
 
@@ -389,7 +390,10 @@ def score_calc():
     roadPoints = roadList.count("*")
     print(f"Road Points: {roadPoints}")
 
-    totalPoints = residentialPoints+ industryPoints + commPoints + parkPoints + roadPoints;
+    totalPoints = residentialPoints+ industryPoints + commPoints + parkPoints + roadPoints
+    return totalPoints
+
+
 def coin_calc(choice,row,column):
     global coin
     tempList = []
@@ -492,11 +496,10 @@ def leaderboard():
 def savehighscore(totalPoints):
     player = input('Enter your name: ')
     totalscore = str(totalPoints)
-    leaderboard_file = 'leaderboard.txt'
-    openleaderboard = open(leaderboard_file,'+')
-    line = '{},{}\n'.format(player,totalscore)
-    openleaderboard.write(line)
-    openleaderboard.close()
+    leaderboard_file = open('leaderboard.txt','a')
+    leaderboard_file.write('{},{}'.format(player,totalscore))
+    leaderboard_file.close()
+    
 
 # RUNTIME CODE BELOW
 
