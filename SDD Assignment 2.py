@@ -1,6 +1,7 @@
 import random # To be able to get a random number
 import sys    # To close the game
 from random import random, randint
+import shelve
 
 board = []
 buildings = []
@@ -13,6 +14,13 @@ NUM_COLUMNS = 20
 turn = 1
 option = -1
 coin = 16
+
+totalPoints = 0
+residentialPoints = 0
+industryPoints = 0
+commPoints = 0
+parkPoints = 0
+roadPoints = 0
 gameoverflag = False # SET TO TRUE TO INITIATE GAME OVER... ADD DIFFERENT MESSAGES FOR FAILURE AT THE RUNTIME.
 
 print('Welcome, Mayor of Ngee Ann City!')
@@ -276,10 +284,11 @@ def losscheck(coin,board):
 
 def score_calc():
     global coin
-
+    global board
     commercialList = []
     parkList = []
     roadList = []
+    totalPoints = 0
     residentialPoints = 0
     industryPoints = 0
     commPoints = 0
@@ -339,30 +348,40 @@ def score_calc():
 
     print(f"Commercial Points: {commPoints}")
 
-    #Park (not fully complete)
+    #Park
     for row in range(NUM_ROWS):
         for column in range(NUM_COLUMNS):
             if (board[row][column] == 'O'):
-                if board[row+1][column] == 'O':
-                    parkPoints +=1
-                elif board[row-1][column] =='O':
-                    parkPoints +=1
-                elif board[row][column+1] =='O':
-                    parkPoints+=1
-                elif board[row][column-1] =='O':
-                    parkPoints+=1
+                checkup, checkleft, checkright, checkdown, checkcurrent = prox_check(row,column,board)
+                if checkup == True:             
+                    parkList.append(board[row][column-1])
+                if checkdown == True:              
+                    parkList.append(board[row][column+1])
+                if checkleft == True:
+                    parkList.append(board[row-1][column])
+                if checkright == True:             
+                    parkList.append(board[row+1][column])
+    parkPoints = parkList.count("O")
+
     print(f"Park Points: {parkPoints}")
+
     #Road (not fully done yet)
     for row in range(NUM_ROWS):
         for column in range(NUM_COLUMNS):  
             if(board[row][column] == '*'):
-                if (board[row][column+1] == '*'):
-                    roadPoints += 1
-                elif(board[row][column+1] =='*'):
-                    roadPoints +=1
+                checkup, checkleft, checkright, checkdown, checkcurrent = prox_check(row,column,board)
+                if checkup == True:             
+                    continue
+                if checkdown == True:              
+                    continue
+                if checkleft == True:
+                    roadList.append(board[row-1][column])
+                if checkright == True:             
+                    roadList.append(board[row+1][column])
+    roadPoints = roadList.count("*")
     print(f"Road Points: {roadPoints}")
 
-
+    totalPoints = residentialPoints+ industryPoints + commPoints + parkPoints + roadPoints;
 def coin_calc(choice,row,column):
     global coin
     tempList = []
@@ -398,7 +417,7 @@ def ingameMenu():
                 break
             elif choice =='3':
                 #savegame
-                print('In Progress...')
+                save_game()
                 turn -=1
                 break
             elif choice =='0':
@@ -409,6 +428,42 @@ def ingameMenu():
                 print("Please enter a valid choice.")
         except ValueError:
                     print('Please enter a valid choice.')
+
+def save_game():
+    shelfFile = shelve.open('some_file')
+    shelfFile['totalscore']  = totalPoints
+    shelfFile['residentialscore'] =  residentialPoints
+    shelfFile['industryscore'] =  industryPoints
+    shelfFile['commscore'] =  commPoints
+    shelfFile['parkscore'] =  parkPoints
+    shelfFile['roadscore'] =  roadPoints
+    shelfFile['turn'] = turn
+    shelfFile['coins'] = coin
+    shelfFile['board'] = board
+    shelfFile['num_rows'] = NUM_ROWS
+    shelfFile['num_columns'] = NUM_COLUMNS
+
+    shelfFile.close()
+# RUNTIME CODE BELOW
+
+def load_game():
+    shelfFile = shelve.open('some_file')
+    totalPoints = shelfFile['totalscore'] 
+    residentialPoints = shelfFile['residentialscore']
+    industryPoints = shelfFile['industryscore']
+    commPoints = shelfFile['commscore']
+    parkPoints = shelfFile['parkscore']
+    roadPoints = shelfFile['roadscore']
+    turn = shelfFile['turn']
+    coin = shelfFile['coins'] 
+    board = shelfFile['board']
+    NUM_ROWS = shelfFile['num_rows']
+    NUM_COLUMNS = shelfFile['num_columns']
+    shelfFile.close()
+
+
+
+
 
 
 # RUNTIME CODE BELOW
@@ -423,7 +478,9 @@ while True:
             ingameMenu()
             turn+=1
     elif option == 2:
-        print('No.')
+        load_game()
+        #display_board(board,turn,coin)
+        ingameMenu()
     elif option == 3:
         print('No.')
     elif option == 4:
