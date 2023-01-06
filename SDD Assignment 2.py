@@ -37,10 +37,8 @@ def first_screen():
     if sogchoice == 1:                
         return 1
     if sogchoice == 2:
-        print('\n Loading... \n')
         return 2
     if sogchoice == 3:
-        print('haha u bad we make later')
         return 3
     if sogchoice ==4:
         return 4
@@ -122,46 +120,7 @@ def display_board(board,turn,coin):
         print('+')
     print("\nCoin(s): " + str(coin) + "\n")
 
-def verify(piece,location):                             #checks which type of piece it is, and parses through the verification using the required verification function
-    global board
-    if piece == "R":
-        residentialPiece(location,board)
-    elif piece == "I":
-        industrialPiece(location,board)
-    elif piece == "C":
-        commercialPiece(location,board)
-    elif piece == "O":
-        parkPiece(location,board)
-    elif piece == "*":
-        roadPiece(location,board)
-
-def residentialPiece(location,board):
-    localscore = 0
-
-    return localscore
-
-def industrialPiece(location,board):
-    localscore = 0
-
-    return localscore
-
-def commercialPiece(location,board):
-    localscore = 0
-
-    return localscore
-
-def roadPiece(location,board):
-    localscore = 0
-
-    return localscore
-
-def parkPiece(location,board):
-    localscore = 0
-
-    return localscore
-
 def check_input(choice):
-    # Split the input string on the comma
     coords = choice.split(',')
     
     # Check that there are exactly two parts
@@ -199,9 +158,9 @@ def place_buildings(board):
             choice = choice.upper()
             if choice == building1 or choice == building2:
                 break
-            print("Please enter one of the buildings in the options given.")
+            print("\nPlease enter one of the buildings in the options given.\n")
         except ValueError:
-            print("Invalid input! Please enter one of the buildings in the options given.")
+            print("\nInvalid input! Please enter one of the buildings in the options given.\n")
             continue
     if choice in building_list:
         while True:
@@ -235,7 +194,6 @@ def place_buildings(board):
             if checkright == True and checkcurrent == False:
                 if board[y_coord][x_coord+1] != '   ': #checks the cell on the right!
                     allowplace = True
-
         if allowplace == True:
             board[y_coord][x_coord] = choice
             coin -= 1
@@ -276,8 +234,6 @@ def prox_check(row,column,board):
             checkcurrent = False
         else:
             checkcurrent = True
-
-        print(checkup,checkleft,checkright,checkdown,checkcurrent)
         return checkup, checkleft, checkright, checkdown, checkcurrent       
 def losscheck(coin,board):
     global gameoverflag
@@ -285,7 +241,7 @@ def losscheck(coin,board):
     if coin == 0:
         gameoverflag = True
         display_board(board,turn,coin)
-        print("You ran out of money to develop the city, and are ousted by your people.\nGame Over...")
+        print("You ran out of money to develop the city, and are ousted by your people.\nGame Over...\n")
     if gameoverflag == True:
         totalPoints = score_calc()
         savehighscore(totalPoints)
@@ -303,6 +259,7 @@ def score_calc():
     commPoints = 0
     parkPoints = 0
     roadPoints = 0
+    print("\n=== Points gathered for each building ===")
 
     # Residential
     for row in range (NUM_ROWS):
@@ -390,11 +347,13 @@ def score_calc():
     print(f"Road Points: {roadPoints}")
 
     totalPoints = residentialPoints+ industryPoints + commPoints + parkPoints + roadPoints
+    print(f"Total points: {totalPoints}")
     return totalPoints
 
 
 def coin_calc(choice,row,column):
     global coin
+    global resiCount
     tempList = []
     if choice in ['I', 'C']:
         checkup, checkleft, checkright, checkdown, checkcurrent = prox_check(row,column,board)
@@ -409,7 +368,9 @@ def coin_calc(choice,row,column):
     for building in tempList:
         if building == "R":
             coin += 1
-    print(tempList)
+    resiCount = tempList.count("R")
+    if resiCount > 0:
+        print(f"\n'{choice}' placed next to {resiCount} 'R' building(s)! +{resiCount} coin(s)! ")
 
 def ingameMenu():
     global gameoverflag
@@ -432,7 +393,7 @@ def ingameMenu():
                 turn -=1
                 break
             elif choice =='0':
-                print('Returning...')
+                print('\nReturning...')
                 gameoverflag = True
                 break
             else:
@@ -495,7 +456,7 @@ def leaderboard():
             count += 1
 
 def savehighscore(totalPoints):
-    print('Naming rules: Do not use "," in your given name, it will be removed.')
+    print('\nNaming rules: Do not use "," in your given name, it will be removed.')
     player = input('Enter your name: ')
     player = player.replace(',','')
     totalscore = str(totalPoints)
@@ -517,6 +478,7 @@ while True:
             ingameMenu()
             turn+=1
     elif option == 2:
+        print('\nLoading...\n')
         open_game()
         saved_numbers = open_game()
         board = saved_numbers[1]
@@ -526,7 +488,7 @@ while True:
             display_board(board,turn,coin)
             ingameMenu()
     elif option == 3:
-        print('Loading...')
+        print('\nLoading...\n')
         leaderboard()
     elif option == 4:
         game_rule()
