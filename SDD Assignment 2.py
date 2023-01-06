@@ -242,6 +242,10 @@ def losscheck(coin,board):
         gameoverflag = True
         display_board(board,turn,coin)
         print("You ran out of money to develop the city, and are ousted by your people.\nGame Over...\n")
+    elif turn > 400:
+        gameoverflag = True
+        display_board(board,turn,coin)
+        print("You ran out of space to develop the city, your services were no longer required...\nGame over...\n")
     if gameoverflag == True:
         totalPoints = score_calc()
         savehighscore(totalPoints)
