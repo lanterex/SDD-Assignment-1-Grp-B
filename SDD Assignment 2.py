@@ -448,9 +448,9 @@ def save_game():
             line = "{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}\n".format(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9],row[10],row[11],row[12],row[13],row[14],row[15],row[16],row[17],row[18],row[19]) #formats it in rows
             file.write(line)
 
-    turnFile = "turnnumber.txt"
+    turnFile = "savedata.txt"
     datafile = open(turnFile, 'w')
-    datafile.write(str(turn)) #Writes the turnnumber into the file
+    datafile.write("{},{}".format(turn,coin)) #Writes the turnnumber into the file
     datafile.close()
 
 def open_game():
@@ -464,13 +464,15 @@ def open_game():
         boardList[index][-1] = boardList[index][-1].replace('\n','')
     board = boardList
 
-    turnnumber_datafile = "turnnumber.txt"
-    openturnnumber = open(turnnumber_datafile,'r')
-    for line in openturnnumber:
-        turnnumber_number = line
-        turnnumber_number = int(turnnumber_number)
-
-    return building_list, board, turnnumber_number
+    savedata_datafile = "savedata.txt"
+    opensavedata = open(savedata_datafile,'r')
+    for line in opensavedata:
+        savedata = line
+    savedata = savedata.split(',')
+    savedata[-1] = savedata[-1].replace('\n','')
+    turn = savedata[0]
+    coin = savedata[1]
+    return building_list, board, turn, coin
 
 def takesecond(item):
     return item[1]
@@ -494,7 +496,9 @@ def leaderboard():
             count += 1
 
 def savehighscore(totalPoints):
+    print('Naming rules: Do not use "," in your given name, it will be removed.')
     player = input('Enter your name: ')
+    player = player.replace(',','')
     totalscore = str(totalPoints)
     leaderboard_file = open('leaderboard.txt','a')
     leaderboard_file.write('{},{}'.format(player,totalscore))
@@ -506,6 +510,7 @@ def savehighscore(totalPoints):
 while True:
     option = first_screen()
     exit_main_screen = False
+    gameoverflag = False
     if option == 1:
         start_game(buildings, building_count)
         while gameoverflag == False:
@@ -517,6 +522,7 @@ while True:
         saved_numbers = open_game()
         board = saved_numbers[1]
         turn = saved_numbers[2]
+        coin = saved_numbers[3]
         while gameoverflag == False:
             display_board(board,turn,coin)
             ingameMenu()
