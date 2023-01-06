@@ -58,6 +58,10 @@ def game_rule():
                  per residential adjacent to it."""))
     print("{:17}{}\n".format("Park (O): ","Scores 1 point per park adjacent to it."))
     print("{:17}{}\n".format("Road (*)","Scores 1 point per connected road (*) in the same row."))
+    print('\n- When reading the grid, the x-coordinates is obtained from the top of the graph,\n  and the y-coordinates is obtained from the left of the graph.')
+    print('\n- If you run out of coins, you lose the game.\n')
+
+
     return first_screen()
 
 def start_game(buildings, building_count):
@@ -98,7 +102,7 @@ def start_game(buildings, building_count):
 def display_board(board,turn,coin):
     #TODO print header for columns
     print('\n' + 'Turn ' + str(turn) + '\n')
-    print("Coin(s): " + str(coin) + "\n")
+    
     print('    01    02    03    04    05    06    07    08    09    10    11    12    13    14    15    16    17    18    19    20   ')
     print('  +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+')
     
@@ -116,6 +120,7 @@ def display_board(board,turn,coin):
             else:
                 print('+-----', end = '')
         print('+')
+    print("\nCoin(s): " + str(coin) + "\n")
 
 def verify(piece,location):                             #checks which type of piece it is, and parses through the verification using the required verification function
     global board
