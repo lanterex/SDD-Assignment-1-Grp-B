@@ -447,6 +447,7 @@ def save_game():
     shelfFile['board'] = board
     shelfFile['num_rows'] = NUM_ROWS
     shelfFile['num_columns'] = NUM_COLUMNS
+    shelfFile['gameover_flag'] = gameoverflag
 
     shelfFile.close()
 # RUNTIME CODE BELOW
@@ -464,11 +465,32 @@ def load_game():
     board = shelfFile['board']
     NUM_ROWS = shelfFile['num_rows']
     NUM_COLUMNS = shelfFile['num_columns']
+    gameoverflag = shelfFile['gameover_flag']
     shelfFile.close()
 
+def highscore(totalscore):
+    return
 
+def takesecond(item):
+    return item[1]
 
-
+def leaderboard():
+    leaderboard_file = 'leaderboard.txt'
+    leaderboard = []
+    entry = []
+    openleaderboard = open(leaderboard_file,'r')
+    for line in openleaderboard:
+        line = line.replace('\n','')   #removes the \n from the retrieval
+        entry = line.split(',')        #splits into the required playername field and score
+        entry[-1] = int(entry[-1])
+        leaderboard.append(entry)      #adds to leaderboard
+    leaderboard = sorted(leaderboard,reverse=True,key=takesecond)  #executes a descending order sort with the score as the key
+    print('=== Leaderboard ===')
+    count = 1
+    for entry in leaderboard:
+        if count <= 10:
+            print('{:<4}{:14}{}'.format(count,entry[0],entry[1]))
+            count += 1
 
 
 # RUNTIME CODE BELOW
@@ -484,10 +506,13 @@ while True:
             turn+=1
     elif option == 2:
         load_game()
-        #display_board(board,turn,coin)
-        ingameMenu()
+        while gameoverflag == False:
+            display_board(board,turn,coin)
+            ingameMenu()
+            turn+=1
     elif option == 3:
-        print('No.')
+        print('Loading...')
+        leaderboard()
     elif option == 4:
         game_rule()
     elif option == 0:
