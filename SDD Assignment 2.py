@@ -281,10 +281,13 @@ def prox_check(row,column,board):
         return checkup, checkleft, checkright, checkdown, checkcurrent       
 def losscheck(coin,board):
     global gameoverflag
+    global totalPoints
     if coin == 0:
         gameoverflag = True
         display_board(board,turn,coin)
         print("You ran out of money to develop the city, and are ousted by your people.\nGame Over...")
+    if gameoverflag == True:
+        savehighscore(totalPoints)
 
 
 def score_calc():
@@ -486,6 +489,14 @@ def leaderboard():
             print('{:<4}{:14}{}'.format(count,entry[0],entry[1]))
             count += 1
 
+def savehighscore(totalPoints):
+    player = input('Enter your name: ')
+    totalscore = str(totalPoints)
+    leaderboard_file = 'leaderboard.txt'
+    openleaderboard = open(leaderboard_file,'+')
+    line = '{},{}\n'.format(player,totalscore)
+    openleaderboard.write(line)
+    openleaderboard.close()
 
 # RUNTIME CODE BELOW
 
@@ -503,8 +514,9 @@ while True:
         saved_numbers = open_game()
         board = saved_numbers[1]
         turn = saved_numbers[2]
-        display_board(board,turn,coin)
-        ingameMenu()
+        while gameoverflag == False:
+            display_board(board,turn,coin)
+            ingameMenu()
     elif option == 3:
         print('Loading...')
         leaderboard()
