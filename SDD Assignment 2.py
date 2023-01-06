@@ -435,41 +435,35 @@ def ingameMenu():
                     print('Please enter a valid choice.')
 
 def save_game():
-    shelfFile = shelve.open('some_file')
-    shelfFile['totalscore']  = totalPoints
-    shelfFile['residentialscore'] =  residentialPoints
-    shelfFile['industryscore'] =  industryPoints
-    shelfFile['commscore'] =  commPoints
-    shelfFile['parkscore'] =  parkPoints
-    shelfFile['roadscore'] =  roadPoints
-    shelfFile['turn'] = turn
-    shelfFile['coins'] = coin
-    shelfFile['board'] = board
-    shelfFile['num_rows'] = NUM_ROWS
-    shelfFile['num_columns'] = NUM_COLUMNS
-    shelfFile['gameover_flag'] = gameoverflag
+    mapFile = "board.txt"
+    with open(mapFile, "w") as file:
+        for row in board:
+            line = "{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}\n".format(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9],row[10],row[11],row[12],row[13],row[14],row[15],row[16],row[17],row[18],row[19]) #formats it in rows
+            file.write(line)
 
-    shelfFile.close()
-# RUNTIME CODE BELOW
+    turnFile = "turnnumber.txt"
+    datafile = open(turnFile, 'w')
+    datafile.write(str(turn)) #Writes the turnnumber into the file
+    datafile.close()
 
-def load_game():
-    shelfFile = shelve.open('some_file')
-    totalPoints = shelfFile['totalscore'] 
-    residentialPoints = shelfFile['residentialscore']
-    industryPoints = shelfFile['industryscore']
-    commPoints = shelfFile['commscore']
-    parkPoints = shelfFile['parkscore']
-    roadPoints = shelfFile['roadscore']
-    turn = shelfFile['turn']
-    coin = shelfFile['coins'] 
-    board = shelfFile['board']
-    NUM_ROWS = shelfFile['num_rows']
-    NUM_COLUMNS = shelfFile['num_columns']
-    gameoverflag = shelfFile['gameover_flag']
-    shelfFile.close()
+def open_game():
 
-def highscore(totalscore):
-    return
+    board_datafile = "board.txt"
+    openmap_grid = open(board_datafile,'r')
+    boardList = []
+    for line in openmap_grid:
+        boardList.append(line.split(','))
+    for index in range (len(boardList)):
+        boardList[index][-1] = boardList[index][-1].replace('\n','')
+    board = boardList
+
+    turnnumber_datafile = "turnnumber.txt"
+    openturnnumber = open(turnnumber_datafile,'r')
+    for line in openturnnumber:
+        turnnumber_number = line
+        turnnumber_number = int(turnnumber_number)
+
+    return building_list, board, turnnumber_number
 
 def takesecond(item):
     return item[1]
@@ -505,11 +499,12 @@ while True:
             ingameMenu()
             turn+=1
     elif option == 2:
-        load_game()
-        while gameoverflag == False:
-            display_board(board,turn,coin)
-            ingameMenu()
-            turn+=1
+        open_game()
+        saved_numbers = open_game()
+        board = saved_numbers[1]
+        turn = saved_numbers[2]
+        display_board(board,turn,coin)
+        ingameMenu()
     elif option == 3:
         print('Loading...')
         leaderboard()
