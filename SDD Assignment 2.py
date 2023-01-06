@@ -259,7 +259,7 @@ def score_calc():
     commPoints = 0
     parkPoints = 0
     roadPoints = 0
-    print("\n=== Points gathered for each building ===")
+    print("\n=== Points gathered for each building ===\n")
 
     # Residential
     for row in range (NUM_ROWS):
@@ -347,7 +347,7 @@ def score_calc():
     print(f"Road Points: {roadPoints}")
 
     totalPoints = residentialPoints+ industryPoints + commPoints + parkPoints + roadPoints
-    print(f"Total points: {totalPoints}")
+    print(f"\nTotal points: {totalPoints}")
     return totalPoints
 
 
@@ -389,7 +389,9 @@ def ingameMenu():
                 break
             elif choice =='3':
                 #savegame
+                print("\nSaving...\n")
                 save_game()
+                print("\nSaved!\n")
                 turn -=1
                 break
             elif choice =='0':
