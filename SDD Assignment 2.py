@@ -336,36 +336,35 @@ def score_calc():
     print(f"Industry Points: {industryPoints}") #Test print to see if it adds.
 
     # Commercial
-    tempList = []
     for row in range (NUM_ROWS):
         for column in range (NUM_COLUMNS):
             if board[column][row] == 'C':
                 checkup, checkleft, checkright, checkdown, checkcurrent = prox_check(row,column,board)
                 if checkup == True:             
-                    tempList.append(board[column-1][row])
+                    commercialList.append(board[column-1][row])
                 if checkdown == True:              
-                    tempList.append(board[column+1][row])
+                    commercialList.append(board[column+1][row])
                 if checkleft == True:
-                    tempList.append(board[column][row-1])
+                    commercialList.append(board[column][row-1])
                 if checkright == True:             
-                    tempList.append(board[column][row+1])
-    commPoints = tempList.count("C")
+                    commercialList.append(board[column][row+1])
+    commPoints = commercialList.count("C")
 
     print(f"Commercial Points: {commPoints}")
 
     #Park
     for row in range(NUM_ROWS):
         for column in range(NUM_COLUMNS):
-            if (board[row][column] == 'O'):
+            if (board[column][row] == 'O'):
                 checkup, checkleft, checkright, checkdown, checkcurrent = prox_check(row,column,board)
                 if checkup == True:             
-                    parkList.append(board[row][column-1])
+                    parkList.append(board[column-1][row])
                 if checkdown == True:              
-                    parkList.append(board[row][column+1])
+                    parkList.append(board[column+1][row])
                 if checkleft == True:
-                    parkList.append(board[row-1][column])
+                    parkList.append(board[column][row-1])
                 if checkright == True:             
-                    parkList.append(board[row+1][column])
+                    parkList.append(board[column][row+1])
     parkPoints = parkList.count("O")
 
     print(f"Park Points: {parkPoints}")
@@ -373,20 +372,21 @@ def score_calc():
     #Road (not fully done yet)
     for row in range(NUM_ROWS):
         for column in range(NUM_COLUMNS):  
-            if(board[row][column] == '*'):
+            if(board[column][row] == '*'):
                 checkup, checkleft, checkright, checkdown, checkcurrent = prox_check(row,column,board)
                 if checkup == True:             
                     continue
                 if checkdown == True:              
                     continue
                 if checkleft == True:
-                    roadList.append(board[row-1][column])
+                    roadList.append(board[column][row-1])
                 if checkright == True:             
-                    roadList.append(board[row+1][column])
+                    roadList.append(board[column][row+1])
     roadPoints = roadList.count("*")
     print(f"Road Points: {roadPoints}")
 
     totalPoints = residentialPoints+ industryPoints + commPoints + parkPoints + roadPoints;
+    print(f"\nTotal score: {totalPoints}")
 def coin_calc(choice,row,column):
     global coin
     tempList = []
