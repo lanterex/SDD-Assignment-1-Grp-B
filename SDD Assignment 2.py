@@ -238,6 +238,7 @@ def prox_check(row,column,board):
 def losscheck(coin,board):
     global gameoverflag
     global totalPoints
+    global turn
     if coin == 0:
         gameoverflag = True
         display_board(board,turn,coin)
@@ -437,7 +438,9 @@ def open_game():
     savedata = savedata.split(',')
     savedata[-1] = savedata[-1].replace('\n','')
     turn = savedata[0]
+    turn = int(turn)
     coin = savedata[1]
+    coin = int(coin)
     return building_list, board, turn, coin
 
 def takesecond(item):
@@ -493,6 +496,7 @@ while True:
         while gameoverflag == False:
             display_board(board,turn,coin)
             ingameMenu()
+            turn +=1
     elif option == 3:
         print('\nLoading...\n')
         leaderboard()
