@@ -500,7 +500,7 @@ def savehighscore(totalPoints):
     player = player.replace(',','')
     totalscore = str(totalPoints)
     leaderboard_file = open('leaderboard.txt','a')
-    leaderboard_file.write('{},{}'.format(player,totalscore))
+    leaderboard_file.write('{},{}\n'.format(player,totalscore))
     leaderboard_file.close()
     
 
