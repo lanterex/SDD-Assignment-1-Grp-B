@@ -57,7 +57,7 @@ def game_rule():
     print("{:17}{}\n".format("Park (O): ","Scores 1 point per park adjacent to it."))
     print("{:17}{}\n".format("Road (*)","Scores 1 point per connected road (*) in the same row."))
     print('\n- When reading the grid, the x-coordinates is obtained from the top of the graph,\n  and the y-coordinates is obtained from the left of the graph.')
-    print('\n- If you run out of coins, you lose the game.\n')
+    print('\n- If you run out of coins, the game ends and your score is tallied.\n')
 
 
     return first_screen()
