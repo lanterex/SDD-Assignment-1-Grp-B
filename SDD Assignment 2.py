@@ -281,10 +281,14 @@ def prox_check(row,column,board):
         return checkup, checkleft, checkright, checkdown, checkcurrent       
 def losscheck(coin,board):
     global gameoverflag
+    global totalPoints
     if coin == 0:
         gameoverflag = True
         display_board(board,turn,coin)
         print("You ran out of money to develop the city, and are ousted by your people.\nGame Over...")
+    if gameoverflag == True:
+        totalPoints = score_calc()
+        savehighscore(totalPoints)
 
 
 def score_calc():
@@ -385,8 +389,10 @@ def score_calc():
     roadPoints = roadList.count("*")
     print(f"Road Points: {roadPoints}")
 
-    totalPoints = residentialPoints+ industryPoints + commPoints + parkPoints + roadPoints;
-    print(f"\nTotal score: {totalPoints}")
+    totalPoints = residentialPoints+ industryPoints + commPoints + parkPoints + roadPoints
+    return totalPoints
+
+
 def coin_calc(choice,row,column):
     global coin
     tempList = []
@@ -435,47 +441,75 @@ def ingameMenu():
                     print('Please enter a valid choice.')
 
 def save_game():
-    shelfFile = shelve.open('some_file')
-    shelfFile['totalscore']  = totalPoints
-    shelfFile['residentialscore'] =  residentialPoints
-    shelfFile['industryscore'] =  industryPoints
-    shelfFile['commscore'] =  commPoints
-    shelfFile['parkscore'] =  parkPoints
-    shelfFile['roadscore'] =  roadPoints
-    shelfFile['turn'] = turn
-    shelfFile['coins'] = coin
-    shelfFile['board'] = board
-    shelfFile['num_rows'] = NUM_ROWS
-    shelfFile['num_columns'] = NUM_COLUMNS
+    mapFile = "board.txt"
+    with open(mapFile, "w") as file:
+        for row in board:
+            line = "{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}\n".format(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9],row[10],row[11],row[12],row[13],row[14],row[15],row[16],row[17],row[18],row[19]) #formats it in rows
+            file.write(line)
 
-    shelfFile.close()
-# RUNTIME CODE BELOW
+    turnFile = "savedata.txt"
+    datafile = open(turnFile, 'w')
+    datafile.write("{},{}".format(turn,coin)) #Writes the turnnumber into the file
+    datafile.close()
 
-def load_game():
-    shelfFile = shelve.open('some_file')
-    totalPoints = shelfFile['totalscore'] 
-    residentialPoints = shelfFile['residentialscore']
-    industryPoints = shelfFile['industryscore']
-    commPoints = shelfFile['commscore']
-    parkPoints = shelfFile['parkscore']
-    roadPoints = shelfFile['roadscore']
-    turn = shelfFile['turn']
-    coin = shelfFile['coins'] 
-    board = shelfFile['board']
-    NUM_ROWS = shelfFile['num_rows']
-    NUM_COLUMNS = shelfFile['num_columns']
-    shelfFile.close()
+def open_game():
 
+    board_datafile = "board.txt"
+    openmap_grid = open(board_datafile,'r')
+    boardList = []
+    for line in openmap_grid:
+        boardList.append(line.split(','))
+    for index in range (len(boardList)):
+        boardList[index][-1] = boardList[index][-1].replace('\n','')
+    board = boardList
 
+    savedata_datafile = "savedata.txt"
+    opensavedata = open(savedata_datafile,'r')
+    for line in opensavedata:
+        savedata = line
+    savedata = savedata.split(',')
+    savedata[-1] = savedata[-1].replace('\n','')
+    turn = savedata[0]
+    coin = savedata[1]
+    return building_list, board, turn, coin
 
+def takesecond(item):
+    return item[1]
 
+def leaderboard():
+    leaderboard_file = 'leaderboard.txt'
+    leaderboard = []
+    entry = []
+    openleaderboard = open(leaderboard_file,'r')
+    for line in openleaderboard:
+        line = line.replace('\n','')   #removes the \n from the retrieval
+        entry = line.split(',')        #splits into the required playername field and score
+        entry[-1] = int(entry[-1])
+        leaderboard.append(entry)      #adds to leaderboard
+    leaderboard = sorted(leaderboard,reverse=True,key=takesecond)  #executes a descending order sort with the score as the key
+    print('=== Leaderboard ===')
+    count = 1
+    for entry in leaderboard:
+        if count <= 10:
+            print('{:<4}{:14}{}'.format(count,entry[0],entry[1]))
+            count += 1
 
+def savehighscore(totalPoints):
+    print('Naming rules: Do not use "," in your given name, it will be removed.')
+    player = input('Enter your name: ')
+    player = player.replace(',','')
+    totalscore = str(totalPoints)
+    leaderboard_file = open('leaderboard.txt','a')
+    leaderboard_file.write('{},{}'.format(player,totalscore))
+    leaderboard_file.close()
+    
 
 # RUNTIME CODE BELOW
 
 while True:
     option = first_screen()
     exit_main_screen = False
+    gameoverflag = False
     if option == 1:
         start_game(buildings, building_count)
         while gameoverflag == False:
@@ -483,11 +517,17 @@ while True:
             ingameMenu()
             turn+=1
     elif option == 2:
-        load_game()
-        #display_board(board,turn,coin)
-        ingameMenu()
+        open_game()
+        saved_numbers = open_game()
+        board = saved_numbers[1]
+        turn = saved_numbers[2]
+        coin = saved_numbers[3]
+        while gameoverflag == False:
+            display_board(board,turn,coin)
+            ingameMenu()
     elif option == 3:
-        print('No.')
+        print('Loading...')
+        leaderboard()
     elif option == 4:
         game_rule()
     elif option == 0:
